@@ -4,7 +4,7 @@ import Prelude hiding (append)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Control.Monad.Eff.JQuery (JQuery, JQueryEvent, on, append, css, create, appendText, body, ready, setText, getValue, select, getProp, setAttr, attr, setProp)
+import Control.Monad.Eff.JQuery (JQuery, JQueryEvent, on, append, css, create, appendText, body, ready, setText, getValue, select, getProp, setAttr, attr, setProp, remove)
 import Control.Monad.Except (runExcept)
 import Data.Foreign.Class (read)
 import Data.Foldable (for_)
@@ -44,3 +44,12 @@ main = ready $ do
         scrollVal <- getProp "scrollHeight" output
         for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
           setProp "scrollTop" scrollH output
+        runCommand command input output
+    runCommand comm input output = case comm of
+      "clear" -> do
+        outLines <- select "#output p"
+        remove outLines
+      _ -> do
+        outLine <- create "<p>"
+        setText ("Invalid command: " <> comm) outLine
+        append outLine output
