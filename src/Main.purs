@@ -20,20 +20,11 @@ main = ready $ do
 
     log "Script imported"
 
-    input <- select "#command"
-  
+    cmdForm <- select "#commandForm"
+    input  <- select "#command"
     output <- select "#output"
-    --outLine <- create "<p>"
-    --append outLine output
 
-    --setText "Terminal opened ..." outLine
-  
-
-  --div <- create "<div>"
-  --appendText "Your Name: " div
-  --append div body
-  --log "Hi"
-    on "change" (handleCommand input output) input
+    on "change" (handleCommand input output) cmdForm
   where
     handleCommand :: JQuery
       -> JQuery
@@ -49,6 +40,7 @@ main = ready $ do
         outLine <- create "<p>"
         setText ("~> " <> command) outLine
         append outLine output
+        setProp "value" "" input
         scrollVal <- getProp "scrollHeight" output
         for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
           setProp "scrollTop" scrollH output
