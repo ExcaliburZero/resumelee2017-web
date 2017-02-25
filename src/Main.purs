@@ -42,6 +42,7 @@ main = ready $ do
     -- Watch for commands
     on "change" (handleCommand prompt input output files curDir) cmdForm
   where
+    -- | Handles the execution of terminal commands.
     handleCommand :: JQuery
       -> JQuery
       -> JQuery
@@ -57,19 +58,37 @@ main = ready $ do
     handleCommand prompt input output files curDir _ _ = unsafePartial do
       val <- getValue input
       for_ (runExcept (read val)) \command -> do
-        outLine <- create "<p>"
-        dir <- readRef curDir
-        setText (show dir <> promptSym <> command) outLine
-        setText (show dir <> promptSym) prompt
-        append outLine output
-        setProp "value" "" input
+        printCommand command prompt output curDir
+        clearInput input
+
         runCommand command input output files curDir
+
+        updatePrompt prompt curDir
+        scrollDown output
+
+    -- | Prints out the prompt for the command that the user entered.
+    printCommand command prompt output curDir = do
+      outLine <- create "<p>"
+      dir <- readRef curDir
+      setText (show dir <> promptSym <> command) outLine
+      append outLine output
+
+    -- | Clears out the command input box.
+    clearInput input = setProp "value" "" input
+
+    -- | Updates the prompt to use the new current directory.
+    updatePrompt prompt curDir = do
         nDir <- readRef curDir
         setText (show nDir <> promptSym) prompt
-        scrollVal <- getProp "scrollHeight" output
-        for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
-          setProp "scrollTop" scrollH output
 
+    -- | Scrolls the terminal window down to the bottom of the output.
+    scrollDown output = do
+      scrollVal <- getProp "scrollHeight" output
+      for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
+        setProp "scrollTop" scrollH output
+
+
+    -- | Runs the given terminal command.
     runCommand :: String
       -> JQuery
       -> JQuery
@@ -180,6 +199,7 @@ defaultFiles = Dir "~/" $
 parseFP :: String -> FilePath
 parseFP s = FilePath (toUnfoldable (words s))
 
+-- | Attempts to return the directory at the given file path in the given directory.
 navDir :: FilePath -> File -> Maybe File
 navDir _ (File _ _) = Nothing
 navDir (FilePath Nil) dir = Just dir
@@ -188,6 +208,7 @@ navDir (FilePath (x:xs)) (Dir name files) =
   where
     conDir = findFile x files
 
+-- | Attempts to find the given file in the given list of files.
 findFile :: String -> List File -> Maybe File
 findFile _ Nil = Nothing
 findFile n (f:fs) =
@@ -200,20 +221,24 @@ findFile n (f:fs) =
        then Just f
        else findFile n fs
 
+-- | Concatenates the given list of strings together using the given seperator string.
 concat :: String -> List String -> String
 concat _   Nil    = ""
 concat sep (x:xs) = x <> sep <> concat sep xs
 
+-- | Shows the files that are in the given directory.
 showFiles :: File -> String
 showFiles (Dir name files) = concat "\t" (map show files)
 showFiles file = show file
 
+-- | A directory or file.
 data File = Dir String (List File) | File String String
 
 instance showFile :: Show File where
     show (File name _) = name
     show (Dir  name _) = name
 
+-- | A path for a file location.
 data FilePath = FilePath (List String)
 
 instance eqFilePath :: Eq FilePath where
