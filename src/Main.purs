@@ -29,9 +29,9 @@ main = ready $ do
     input  <- select "#command"
     output <- select "#output"
 
-    let dir = "~/"
+    let dir = FilePath ("~" : Nil)
     curDir <- newRef dir
-    setText (dir <> promptSym) prompt
+    setText (show dir <> promptSym) prompt
 
     files <- newRef defaultFiles
 
@@ -50,8 +50,8 @@ main = ready $ do
       for_ (runExcept (read val)) \command -> do
         outLine <- create "<p>"
         dir <- readRef curDir
-        setText (dir <> promptSym <> command) outLine
-        setText (dir <> promptSym) prompt
+        setText (show dir <> promptSym <> command) outLine
+        setText (show dir <> promptSym) prompt
         append outLine output
         setProp "value" "" input
         runCommand command input output files curDir
@@ -98,3 +98,13 @@ data File = Dir String (List File) | File String String
 instance showFile :: Show File where
     show (File name _) = name
     show (Dir  name _) = name
+
+data FilePath = FilePath (List String)
+
+show' :: FilePath -> String
+show' (FilePath Nil) = ""
+show' (FilePath (x:xs)) = "/" <> x <> show' (FilePath xs)
+
+instance showFilePath :: Show FilePath where
+    show (FilePath Nil) = ""
+    show (FilePath (x:xs)) = x <> show' (FilePath xs)
