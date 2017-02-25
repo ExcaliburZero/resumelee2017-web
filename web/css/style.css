@@ -1,17 +1,39 @@
+body {
+    background-color: #839496;
+}
+
 #container {
     width: 100%;
     text-align: center;
 }
 
 #terminal {
-    background-color: #999999;
+    background-color: #002b36;
+    color: #586e75;
+
+    font-family: "Inconsolata", monospace;
+    font-size: 12pt;
+
     width: 40%;
     margin: 10% auto auto auto;
-    text-align: left;
     padding: 20px;
+
+    text-align: left;
 }
 
 #output {
-    height: 200px;
+    height: 300px;
     overflow: auto;
+}
+
+#input {
+    background-color: #073642;
+    padding: 5px;
+}
+
+input[type="text"] {
+    color: #586e75;
+
+    font-family: "Inconsolata", monospace;
+    font-size: 12pt;
 }
