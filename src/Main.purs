@@ -4,8 +4,8 @@ import Prelude hiding (append)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove)
-import Control.Monad.Eff.Ref (newRef, REF, readRef, writeRef)
+import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove, JQuery, JQueryEvent)
+import Control.Monad.Eff.Ref (newRef, REF, readRef, writeRef, Ref)
 import Control.Monad.Except (runExcept)
 import Data.Array (toUnfoldable)
 import Data.Foreign.Class (read)
@@ -31,22 +31,29 @@ main = ready $ do
     input  <- select "#command"
     output <- select "#output"
 
-    let dir = FilePath ("~" : Nil)
-    curDir <- newRef dir
-    setText (show dir <> promptSym) prompt
-
+    -- Setup files, current diretory, and prompt
     files <- newRef defaultFiles
 
+    let dir = FilePath ("~" : Nil)
+    curDir <- newRef dir
+
+    setText (show dir <> promptSym) prompt
+
+    -- Watch for commands
     on "change" (handleCommand prompt input output files curDir) cmdForm
   where
---    handleCommand :: JQuery
---      -> JQuery
---      -> JQueryEvent
---      -> JQuery
---      -> Eff ( dom :: DOM
---             , console :: CONSOLE
---             | eff
---             ) Unit
+    handleCommand :: JQuery
+      -> JQuery
+      -> JQuery
+      -> Ref File
+      -> Ref FilePath
+      -> JQueryEvent
+      -> JQuery
+      -> Eff ( dom :: DOM
+             , ref :: REF
+             , console :: CONSOLE
+             | eff
+             ) Unit
     handleCommand prompt input output files curDir _ _ = unsafePartial do
       val <- getValue input
       for_ (runExcept (read val)) \command -> do
@@ -62,73 +69,103 @@ main = ready $ do
         scrollVal <- getProp "scrollHeight" output
         for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
           setProp "scrollTop" scrollH output
+
+    runCommand :: String
+      -> JQuery
+      -> JQuery
+      -> Ref File
+      -> Ref FilePath
+      -> Eff ( dom :: DOM
+             , ref :: REF
+             , console :: CONSOLE
+             | eff
+             ) Unit
     runCommand comm input output files curDir = case words comm of
-      ["clear"] -> do
-        outLines <- select "#output p"
-        remove outLines
-      ["ls"] -> do
-        outLine <- create "<p>"
-        fs <- readRef files
-        cd <- readRef curDir
-        let cd' = case cd of
-                    FilePath (_:xs) -> FilePath xs
-                    x -> x
-        let d = case navDir cd' fs of
-                  Just f -> f
-                  Nothing -> File "" ""
-        setText (showFiles d) outLine
-        append outLine output
-      ["cd", ".."] -> do
-        cd <- readRef curDir
-        if cd /= FilePath ("~" : Nil)
-           then case cd of
-             FilePath xs -> do
-               case init xs of
-                 Just x -> writeRef curDir (FilePath x)
-                 Nothing -> log "Empty current file path."
-           else
-             writeRef curDir cd
-      ["cd", dir] -> do
-        let nfp = parseFP dir
-        fs <- readRef files
-        cd <- readRef curDir
-        let cd' = case cd of
-                    FilePath (_:xs) -> FilePath xs
-                    x -> x
-        let d = navDir cd' fs
-        let nd = d >>= navDir nfp
-        outLine <- create "<p>"
-        case nd of
-          Just sd -> do
-            writeRef curDir (cd <> nfp)
-            setText "Entered directory" outLine
-          Nothing -> do
-            setText "Directory not found" outLine
-        append outLine output
-      ["cat", file] -> do
-        outLine <- create "<p>"
-        fs <- readRef files
-        cd <- readRef curDir
-        let cd' = case cd of
-                    FilePath (_:xs) -> FilePath xs
-                    x -> x
-        let d = navDir cd' fs
-        let f = case d of
-                  Just (Dir _ dfiles) -> findFile file dfiles
-                  _ -> Nothing
-        _ <- case f of
-               Just (File _ contents) -> setText contents outLine
-               _ -> setText ("Invalid file: " <> file) outLine
-        append outLine output
+      ["clear"]     -> runClear
+      ["ls"]        -> runLs output files curDir
+      ["cd", ".."]  -> runCdDD curDir
+      ["cd", dir]   -> runCdDir dir output files curDir
+      ["cat", file] -> runCat file output files curDir
+      _             -> runInvalidCommand comm output
 
-      _ -> do
-        outLine <- create "<p>"
-        setText ("Invalid command: " <> comm) outLine
-        append outLine output
+    -- | Clears all of the output from the terminal screen.
+    runClear = do
+      outLines <- select "#output p"
+      remove outLines
 
+    -- | Lists all of the files in the directory.
+    runLs output files curDir = do
+      outLine <- create "<p>"
+      fs <- readRef files
+      cd <- readRef curDir
+      let cd' = case cd of
+                  FilePath (_:xs) -> FilePath xs
+                  x -> x
+      let d = case navDir cd' fs of
+                Just f -> f
+                Nothing -> File "" ""
+      setText (showFiles d) outLine
+      append outLine output
+
+    -- | cd's down one directory.
+    runCdDD curDir = do
+      cd <- readRef curDir
+      if cd /= FilePath ("~" : Nil)
+         then case cd of
+           FilePath xs -> do
+             case init xs of
+               Just x -> writeRef curDir (FilePath x)
+               Nothing -> log "Empty current file path."
+         else
+           writeRef curDir cd
+
+    -- | Attempts to cd into the given subdirectory.
+    runCdDir dir output files curDir = do
+      let nfp = parseFP dir
+      fs <- readRef files
+      cd <- readRef curDir
+      let cd' = case cd of
+                  FilePath (_:xs) -> FilePath xs
+                  x -> x
+      let d = navDir cd' fs
+      let nd = d >>= navDir nfp
+      outLine <- create "<p>"
+      case nd of
+        Just sd -> do
+          writeRef curDir (cd <> nfp)
+          setText "Entered directory" outLine
+        Nothing -> do
+          setText "Directory not found" outLine
+      append outLine output
+
+    -- | Attempts to print out the contents of the given file in the current directory.
+    runCat file output files curDir = do
+      outLine <- create "<p>"
+      fs <- readRef files
+      cd <- readRef curDir
+      let cd' = case cd of
+                  FilePath (_:xs) -> FilePath xs
+                  x -> x
+      let d = navDir cd' fs
+      let f = case d of
+                Just (Dir _ dfiles) -> findFile file dfiles
+                _ -> Nothing
+      _ <- case f of
+             Just (File _ contents) -> setText contents outLine
+             _ -> setText ("Invalid file: " <> file) outLine
+      append outLine output
+
+    -- | Prints out a message indicating that an invalid command was run.
+    runInvalidCommand comm output = do
+      outLine <- create "<p>"
+      setText ("Invalid command: " <> comm) outLine
+      append outLine output
+
+-- | The symbol used for the terminal prompt.
 promptSym :: String
 promptSym = " $ "
 
+-- | The files in the simulated file system.
 defaultFiles :: File
 defaultFiles = Dir "~/" $
     Dir "tmp" (
@@ -139,6 +176,7 @@ defaultFiles = Dir "~/" $
   : File "README" "You shoud probably read this."
   : Nil
 
+-- | Parses the given String into a FilePath.
 parseFP :: String -> FilePath
 parseFP s = FilePath (toUnfoldable (words s))
 
