@@ -105,6 +105,21 @@ main = ready $ do
           Nothing -> do
             setText "Directory not found" outLine
         append outLine output
+      ["cat", file] -> do
+        outLine <- create "<p>"
+        fs <- readRef files
+        cd <- readRef curDir
+        let cd' = case cd of
+                    FilePath (_:xs) -> FilePath xs
+                    x -> x
+        let d = navDir cd' fs
+        let f = case d of
+                  Just (Dir _ dfiles) -> findFile file dfiles
+                  _ -> Nothing
+        _ <- case f of
+               Just (File _ contents) -> setText contents outLine
+               _ -> setText ("Invalid file: " <> file) outLine
+        append outLine output
 
       _ -> do
         outLine <- create "<p>"
