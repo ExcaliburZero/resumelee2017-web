@@ -9,6 +9,7 @@ import Control.Monad.Eff.Ref (newRef, REF, readRef)
 import Control.Monad.Except (runExcept)
 import Data.Foreign.Class (read)
 import Data.Foldable (for_)
+import Data.List (List(..), (:))
 import Data.String.Utils (words)
 import DOM (DOM)
 import Partial.Unsafe (unsafePartial)
@@ -32,7 +33,9 @@ main = ready $ do
     curDir <- newRef dir
     setText (dir <> promptSym) prompt
 
-    on "change" (handleCommand prompt input output curDir) cmdForm
+    files <- newRef defaultFiles
+
+    on "change" (handleCommand prompt input output files curDir) cmdForm
   where
 --    handleCommand :: JQuery
 --      -> JQuery
@@ -42,7 +45,7 @@ main = ready $ do
 --             , console :: CONSOLE
 --             | eff
 --             ) Unit
-    handleCommand prompt input output curDir _ _ = unsafePartial do
+    handleCommand prompt input output files curDir _ _ = unsafePartial do
       val <- getValue input
       for_ (runExcept (read val)) \command -> do
         outLine <- create "<p>"
@@ -51,14 +54,19 @@ main = ready $ do
         setText (dir <> promptSym) prompt
         append outLine output
         setProp "value" "" input
-        runCommand command input output
+        runCommand command input output files curDir
         scrollVal <- getProp "scrollHeight" output
         for_ (runExcept (read scrollVal)) \(scrollH :: Int) -> do
           setProp "scrollTop" scrollH output
-    runCommand comm input output = case words comm of
+    runCommand comm input output files curDir = case words comm of
       ["clear"] -> do
         outLines <- select "#output p"
         remove outLines
+      ["ls"] -> do
+        outLine <- create "<p>"
+        f <- readRef files
+        setText (showFiles f) outLine
+        append outLine output
       _ -> do
         outLine <- create "<p>"
         setText ("Invalid command: " <> comm) outLine
@@ -66,3 +74,27 @@ main = ready $ do
 
 promptSym :: String
 promptSym = " $ "
+
+defaultFiles :: File
+defaultFiles = Dir "~/" $
+    Dir "tmp" (
+        File "test.txt" "This is a test file."
+      : Nil
+    )
+  : File "hello.txt" "Hello there."
+  : File "README" "You shoud probably read this."
+  : Nil
+
+concat :: String -> List String -> String
+concat _   Nil    = ""
+concat sep (x:xs) = x <> sep <> concat sep xs
+
+showFiles :: File -> String
+showFiles (Dir name files) = concat "\t" (map show files)
+showFiles file = show file
+
+data File = Dir String (List File) | File String String
+
+instance showFile :: Show File where
+    show (File name _) = name
+    show (Dir  name _) = name
