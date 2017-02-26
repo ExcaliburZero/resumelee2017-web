@@ -29,7 +29,7 @@ main = ready $ do
 
     cmdForm <- select "#commandForm"
     prompt <- select "#prompt"
-    input  <- select "#command"
+    input  <- select "input"
     output <- select "#output"
 
     -- Setup files, current diretory, and prompt
@@ -195,7 +195,6 @@ main = ready $ do
       case nd of
         Just sd -> do
           writeRef curDir (cd <> nfp)
-          setText "Entered directory" outLine
         Nothing -> do
           setText "Directory not found" outLine
       append outLine output

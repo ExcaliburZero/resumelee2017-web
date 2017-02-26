@@ -1,5 +1,5 @@
 body {
-    background-color: #839496;
+    background-color: #184F5C;
 }
 
 #container {
@@ -14,7 +14,7 @@ body {
     font-family: "Inconsolata", monospace;
     font-size: 12pt;
 
-    width: 40%;
+    width: 50%;
     margin: 10% auto auto auto;
     padding: 20px;
 
@@ -22,7 +22,7 @@ body {
 }
 
 #output {
-    height: 300px;
+    height: 400px;
     overflow: auto;
 }
 
@@ -32,10 +32,10 @@ body {
 }
 
 input[type="text"] {
-    color: #586e75;
+    color: #eee8d5;
 
     font-family: "Inconsolata", monospace;
     font-size: 12pt;
 
-    width: 85%;
+    width: 80%;
 }
