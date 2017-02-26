@@ -4,15 +4,16 @@ import Prelude hiding (append)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove, JQuery, JQueryEvent)
+import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove, JQuery, JQueryEvent, css)
 import Control.Monad.Eff.Ref (newRef, REF, readRef, writeRef, Ref)
 import Control.Monad.Except (runExcept)
 import Data.Array (toUnfoldable)
 import Data.Foreign.Class (read)
 import Data.Foldable (for_)
 import Data.List (List(..), (:), init)
-import Data.String.Utils (words)
 import Data.Maybe (Maybe(..))
+import Data.String.Utils (words)
+import Data.Traversable (traverse)
 import DOM (DOM)
 import Partial.Unsafe (unsafePartial)
 
@@ -123,8 +124,32 @@ main = ready $ do
       let d = case navDir cd' fs of
                 Just f -> f
                 Nothing -> File "" ""
-      setText (showFiles d) outLine
+      contents <- showFiles d
+      _ <- traverse (\x -> do
+                    append x outLine
+                    addTab outLine
+                    ) contents
       append outLine output
+
+    addTab outLine = do
+      space <- create "<span>"
+      setText "\t" space
+      append space outLine
+
+    -- | Shows the files that are in the given directory.
+    showFiles (Dir name files) = traverse showF files
+    showFiles file = (\x -> x : Nil) <$> showF file
+
+    showF (Dir name _) = do
+      span <- create "<span>"
+      setText name span
+      css {"color": colorPrimary} span
+      css {"font-weight": "bold"} span
+      pure span
+    showF (File name _) = do
+      span <- create "<span>"
+      setText name span
+      pure span
 
     -- | cd's down one directory.
     runCdDD curDir = do
@@ -180,6 +205,9 @@ main = ready $ do
       setText ("Invalid command: " <> comm) outLine
       append outLine output
 
+colorPrimary :: String
+colorPrimary = "#839496"
+
 -- | The symbol used for the terminal prompt.
 promptSym :: String
 promptSym = " $ "
@@ -225,11 +253,6 @@ findFile n (f:fs) =
 concat :: String -> List String -> String
 concat _   Nil    = ""
 concat sep (x:xs) = x <> sep <> concat sep xs
-
--- | Shows the files that are in the given directory.
-showFiles :: File -> String
-showFiles (Dir name files) = concat "\t" (map show files)
-showFiles file = show file
 
 -- | A directory or file.
 data File = Dir String (List File) | File String String

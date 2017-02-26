@@ -36,4 +36,6 @@ input[type="text"] {
 
     font-family: "Inconsolata", monospace;
     font-size: 12pt;
+
+    width: 85%;
 }
