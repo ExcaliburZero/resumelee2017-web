@@ -124,6 +124,7 @@ main = ready $ do
       ["cd", ".."]  -> runCdDD curDir
       ["cd", dir]   -> runCdDir dir output files curDir
       ["cat", file] -> runCat file output files curDir
+      ["help"]      -> runHelp output
       _             -> runInvalidCommand comm output
 
     -- | Clears all of the output from the terminal screen.
@@ -216,6 +217,15 @@ main = ready $ do
              _ -> setText ("Invalid file: " <> file) outLine
       append outLine output
 
+    -- | Prints out a message indicating what commands are available.
+    runHelp output = do
+      _ <- traverse (\m -> do
+                      outLine <- create "<p>"
+                      setText m outLine
+                      append outLine output
+                    ) helpMessage
+      pure unit
+
     -- | Prints out a message indicating that an invalid command was run.
     runInvalidCommand comm output = do
       outLine <- create "<p>"
@@ -234,6 +244,17 @@ colorTri = "#268bd2"
 -- | The symbol used for the terminal prompt.
 promptSym :: String
 promptSym = " $ "
+
+helpMessage :: List String
+helpMessage = (
+    "This is a simple terminal emulator which supports the following commands."
+  : "clear - clears the terminal window"
+  : "ls    - lists the files in the current directory"
+  : "cd    - changes the current directory to the specified subdirectory"
+  : "cat   - prints the contents of the specified file"
+  : "help  - prints this usage information"
+  : Nil
+  )
 
 -- | The files in the simulated file system.
 defaultFiles :: File
