@@ -334,11 +334,58 @@ manInvalid prog = (
 -- | The files in the simulated file system.
 defaultFiles :: File
 defaultFiles = Dir "~/" $
-    Dir "tmp" (
-        File "test.txt" "This is a test file."
+    Dir "part1" (
+        File "QUESTION" "Which of the following languages has pattern matching? | a) Java | b) C | c) Scala | d) Python |"
+      : Dir "a" (
+          File "DEADEND" "There is nothing here."
+        : Nil
+        )
+      : Dir "b" (
+          File "part1" "This isn't even a link."
+        : Nil
+        )
+      : Dir "c" (
+          File "QUESTION" "GNU is short for what? | a) GNU's Not Unix | b) General Neophyte Unix | c) Generative Network Utilities | d) GNU's New Utilities |"
+        : Dir "a" (
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.part1"
+          : Nil
+          )
+        : Dir "b" (
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part1"
+          : Nil
+          )
+        : Dir "c" (
+            File "DEADEND" "404 Error"
+          : Nil
+          )
+        : Dir "d" (
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/9/resume.pdf.part1"
+          : Nil
+          )
+        : Nil
+        )
+      : Dir "d" (
+          File "QUESTION" "Tabs or spaces, and how many? | a) 2 tabs | b) 14 spaces | c) 1 tabs + 3 spaces | d) Nothing |"
+        : Dir "5" (
+            File "This is probably not the correct directory" "null"
+          : Nil
+          )
+        : Dir "24" (
+            File "part1" "24 is just a really good number."
+          : Nil
+          )
+        : Dir "37" (
+            File "part1" "Most people choose this number, DL said so."
+          : Nil
+          )
+        : Dir "-i" (
+            File "part1" "This choice was irrational."
+          : Nil
+          )
+        : Nil
+        )
       : Nil
     )
-  : File "hello.txt" "Hello there."
   : File "README" "You shoud probably read this."
   : Nil
 
