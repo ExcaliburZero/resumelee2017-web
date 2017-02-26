@@ -125,6 +125,7 @@ main = ready $ do
       ["cd", dir]   -> runCdDir dir output files curDir
       ["cat", file] -> runCat file output files curDir
       ["help"]      -> runHelp output
+      ["man", prog] -> runMan prog output
       _             -> runInvalidCommand comm output
 
     -- | Clears all of the output from the terminal screen.
@@ -217,14 +218,27 @@ main = ready $ do
              _ -> setText ("Invalid file: " <> file) outLine
       append outLine output
 
-    -- | Prints out a message indicating what commands are available.
-    runHelp output = do
-      _ <- traverse (\m -> do
-                      outLine <- create "<p>"
-                      setText m outLine
-                      append outLine output
-                    ) helpMessage
+    -- | Prints out the given lines of output.
+    printLines lines output = do
+      let printLine m = do
+                          outLine <- create "<p>"
+                          setText m outLine
+                          append outLine output
+      _ <- traverse printLine lines
       pure unit
+
+    -- | Prints out a message indicating what commands are available.
+    runHelp output = printLines helpMessage output
+
+    -- | Prints out a message indicating what commands are available.
+    runMan prog output = case prog of
+      "clear" -> printLines manClear output
+      "ls"    -> printLines manLs    output
+      "cd"    -> printLines manCd    output
+      "cat"   -> printLines manCat   output
+      "help"  -> printLines manHelp  output
+      "man"   -> printLines manMan   output
+      _       -> printLines (manInvalid prog) output
 
     -- | Prints out a message indicating that an invalid command was run.
     runInvalidCommand comm output = do
@@ -253,6 +267,67 @@ helpMessage = (
   : "cd    - changes the current directory to the specified subdirectory"
   : "cat   - prints the contents of the specified file"
   : "help  - prints this usage information"
+  : "man   - prints information on the given command"
+  : Nil
+  )
+
+manClear :: List String
+manClear = (
+    "NAME: clear"
+  : "SYNOPSIS: clear"
+  : "DESCRIPTION: Clears the terminal screen."
+  : "EXAMPLES: clear"
+  : Nil
+  )
+
+manLs :: List String
+manLs = (
+    "NAME: ls"
+  : "SYNOPSIS: ls"
+  : "DESCRIPTION: Lists the contents of the current directory. Colors and bolds directories."
+  : "EXAMPLES: ls"
+  : Nil
+  )
+
+manCd :: List String
+manCd = (
+    "NAME: cd"
+  : "SYNOPSIS: cd DIR | cd .."
+  : "DESCRIPTION: Changes the current directory to the specified subdirectory, or if '..' is given then it moves up one directory."
+  : "EXAMPLES: cd tmp | cd .."
+  : Nil
+  )
+
+manCat :: List String
+manCat = (
+    "NAME: cat"
+  : "SYNOPSIS: cat FILE"
+  : "DESCRIPTION: Prints out the contents of the given file."
+  : "EXAMPLES: cd hello.txt"
+  : Nil
+  )
+
+manHelp :: List String
+manHelp = (
+    "NAME: help"
+  : "SYNOPSIS: help"
+  : "DESCRIPTION: Prints out usage information for this terminal emulator."
+  : "EXAMPLES: help"
+  : Nil
+  )
+
+manMan :: List String
+manMan = (
+    "NAME: man"
+  : "SYNOPSIS: man COMMAND"
+  : "DESCRIPTION: Prints out usage information for the given command."
+  : "EXAMPLES: man ls | man cd | man man"
+  : Nil
+  )
+
+manInvalid :: String -> List String
+manInvalid prog = (
+    ("Invalid program: " <> prog)
   : Nil
   )
 
