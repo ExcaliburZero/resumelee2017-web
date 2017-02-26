@@ -4,7 +4,7 @@ import Prelude hiding (append)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove, JQuery, JQueryEvent, css)
+import Control.Monad.Eff.JQuery (on, append, create, body, ready, setText, getValue, select, getProp, setProp, remove, JQuery, JQueryEvent, css, appendText)
 import Control.Monad.Eff.Ref (newRef, REF, readRef, writeRef, Ref)
 import Control.Monad.Except (runExcept)
 import Data.Array (toUnfoldable)
@@ -38,7 +38,7 @@ main = ready $ do
     let dir = FilePath ("~" : Nil)
     curDir <- newRef dir
 
-    setText (show dir <> promptSym) prompt
+    setPrompt prompt dir
 
     -- Watch for commands
     on "change" (handleCommand prompt input output files curDir) cmdForm
@@ -67,11 +67,26 @@ main = ready $ do
         updatePrompt prompt curDir
         scrollDown output
 
+    setPrompt prompt dir = do
+      dirTxt <- create "<span>"
+      css {"color": colorSecondary} dirTxt
+      setText (show dir) dirTxt
+      append dirTxt prompt
+
+      promptTxt <- create "<span>"
+      css {"color": colorTri} promptTxt
+      setText promptSym promptTxt
+      append promptTxt prompt
+
     -- | Prints out the prompt for the command that the user entered.
     printCommand command prompt output curDir = do
       outLine <- create "<p>"
       dir <- readRef curDir
-      setText (show dir <> promptSym <> command) outLine
+
+      setPrompt outLine dir
+
+      appendText command outLine
+
       append outLine output
 
     -- | Clears out the command input box.
@@ -79,8 +94,11 @@ main = ready $ do
 
     -- | Updates the prompt to use the new current directory.
     updatePrompt prompt curDir = do
-        nDir <- readRef curDir
-        setText (show nDir <> promptSym) prompt
+      setText "" prompt
+
+      dir <- readRef curDir
+
+      setPrompt prompt dir
 
     -- | Scrolls the terminal window down to the bottom of the output.
     scrollDown output = do
@@ -207,6 +225,12 @@ main = ready $ do
 
 colorPrimary :: String
 colorPrimary = "#839496"
+
+colorSecondary :: String
+colorSecondary = "#b58900"
+
+colorTri :: String
+colorTri = "#268bd2"
 
 -- | The symbol used for the terminal prompt.
 promptSym :: String
