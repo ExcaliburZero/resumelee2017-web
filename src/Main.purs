@@ -334,6 +334,8 @@ manInvalid prog = (
 -- | The files in the simulated file system.
 defaultFiles :: File
 defaultFiles = Dir "~/" $
+    --------------------------------------------------------------------------
+    --------------------------------------------------------------------------
     Dir "part1" (
         File "QUESTION" "Which of the following languages has pattern matching? | a) Java | b) C | c) Scala | d) Python |"
       : Dir "a" (
@@ -386,6 +388,8 @@ defaultFiles = Dir "~/" $
         )
       : Nil
     )
+    --------------------------------------------------------------------------
+    --------------------------------------------------------------------------
   : Dir "part2" (
       File "QUESTION" "What is /dev/null ? | a) Dave Null's address | b) An empty file for disposing input streams | c) A device that provides null characters | d) The complaint department |"
     : Dir "a" (
@@ -426,6 +430,62 @@ defaultFiles = Dir "~/" $
       )
     : Nil
     )
+    --------------------------------------------------------------------------
+    --------------------------------------------------------------------------
+  : Dir "part3" (
+      File "QUESTION" "What is tail call elimination? | a) A hashing algorithm | b) A technique for optimizing switch structures | c) A cool band name | d) A compiler optimization |"
+    : Dir "a" (
+        File "QUESTION" "When is it okay to commit api keys into your Git repo? | a) Always | b) Only on Fridays | c) When an oracle tells you to | d) When you are in a rush |"
+      : Dir "a" (
+          File "No" "Nope, nope, nope. Never do that."
+        : Nil
+        )
+      : Dir "b" (
+          File "part3" "Some of my friends commit api keys to their Git repos. I tell them not to, but they don't listen."
+        : Nil
+        )
+      : Dir "c" (
+          File "part3" "If an oracle told to you update your Java version in production, would you do it?"
+        : Nil
+        )
+      : Dir "d" (
+          File "Release the Kraken!" ""
+        : Nil
+        )
+      : Nil
+      )
+    : Dir "b" (
+        File "part3" "Jump tables are cool. Fezes are cool. Deal with it. ⌐■-■"
+      : Nil
+      )
+    : Dir "c" (
+        File "Tail Call Elimination and the Early Birds" ""
+      : Nil
+      )
+    : Dir "d" (
+        File "QUESTION" "The GPLv3 is what type of software license? | a) Propreietary | b) Public Domain | c) Copyleft | d) Non-Commercial |"
+      : Dir "a" (
+          File "Richard Stallman would be disappointed in you. :(" ""
+        : Nil
+        )
+      : Dir "b" (
+          File "part3" "https://en.wikipedia.org/wiki/Public_domain"
+        : Nil
+        )
+      : Dir "c" (
+          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part3"
+        : Nil
+        )
+      : Dir "d" (
+          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.part3"
+        : Nil
+        )
+      : Nil
+      )
+    : Nil
+    )
+    --------------------------------------------------------------------------
+    --------------------------------------------------------------------------
   : File "README" "You shoud probably read this."
   : Nil
 
