@@ -386,6 +386,46 @@ defaultFiles = Dir "~/" $
         )
       : Nil
     )
+  : Dir "part2" (
+      File "QUESTION" "What is /dev/null ? | a) Dave Null's address | b) An empty file for disposing input streams | c) A device that provides null characters | d) The complaint department |"
+    : Dir "a" (
+        File "part2" "Nope, Dave Null lives on Null Island."
+      : Nil
+      )
+    : Dir "b" (
+        File "QUESTION" "What is a daemon? | a) A completed child process that has not yet been reaped | b) A foreground process | c) A background process | d) A giant fire-breathing lizard with wings |"
+      : Dir "a" (
+          File "part2" "Nope, that's a zombie process."
+        : Nil
+        )
+      : Dir "b" (
+          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.part2"
+        : Nil
+        )
+      : Dir "c" (
+          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.part2"
+        : Nil
+        )
+      : Dir "d" (
+          File "really? that's a dragon" ""
+        : Nil
+        )
+      : Nil
+      )
+    : Dir "c" (
+        File "definitely not a dead end" "I'm sure of it."
+      : Nil
+      )
+    : Dir "d" (
+        File "QUESTION" "What kind of bear is best? | x) Black bear | x) Battlestar Galactica | x) Input/Output variables | x) Answer x |"
+      : Dir "x" (
+          File "prolog -> fun" ""
+        : Nil
+        )
+      : Nil
+      )
+    : Nil
+    )
   : File "README" "You shoud probably read this."
   : Nil
 
