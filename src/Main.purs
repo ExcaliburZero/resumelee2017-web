@@ -463,7 +463,7 @@ defaultFiles = Dir "~/" $
       : Nil
       )
     : Dir "d" (
-        File "QUESTION" "The GPLv3 is what type of software license? | a) Propreietary | b) Public Domain | c) Copyleft | d) Non-Commercial |"
+        File "QUESTION" "The GPLv3 is what type of software license? | a) Proprietary | b) Public Domain | c) Copyleft | d) Non-Commercial |"
       : Dir "a" (
           File "Richard Stallman would be disappointed in you. :(" ""
         : Nil
@@ -486,6 +486,48 @@ defaultFiles = Dir "~/" $
     )
     --------------------------------------------------------------------------
     --------------------------------------------------------------------------
+  : Dir "part4" (
+      File "QUESTION" "In C, a right shift (>>>) shifts the bits of a number over to the right and fills with what bit? | a) 1 | b) An empty bit | c) The sign bit | d) 0 |"
+    : Dir "a" (
+          File "part4" "Nope"
+        : Nil
+        )
+    : Dir "b" (
+          File "I don't think that is the answer" ""
+        : Nil
+        )
+    : Dir "c" (
+        File "QUESTION" "A BTree is a tree data structure that? | a) Only has nodes that contain 2 elements | b) Has nodes that are shaped like the letter 'B' | c) Has O(1) search time if it has 10 or more elements | d) Has one more child node than keys in non-leaf nodes |"
+        : Dir "a" (
+            File "part4" "Hash maps are cool"
+          : Nil
+          )
+        : Dir "b" (
+            Dir "recursion" (
+              Dir "recursion" (
+                  File "base case" ""
+              : Nil
+              )
+            : Nil
+            )
+          : Nil
+          )
+        : Dir "c" (
+            File "O(1) search algorithms are very useful" ""
+          : Nil
+          )
+        : Dir "d" (
+            File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.part4"
+          : Nil
+          )
+        : Nil
+        )
+    : Dir "d" (
+          File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.part4"
+        : Nil
+        )
+    : Nil
+    )
   : File "README" "You shoud probably read this."
   : Nil
 
