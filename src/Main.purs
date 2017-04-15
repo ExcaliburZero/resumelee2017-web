@@ -528,6 +528,44 @@ defaultFiles = Dir "~/" $
         )
     : Nil
     )
+    --------------------------------------------------------------------------
+    --------------------------------------------------------------------------
+  : Dir "part5" (
+      File "QUESTION" "A nibble is how many bits? | a) 5 | b) 8 | c) 2 | d) 4 |"
+    : Dir "a" (
+        File "42" "42"
+      : Nil
+      )
+    : Dir "b" (
+        File "That's a byte" ""
+      : Nil
+      )
+    : Dir "c" (
+        File "part5" "Don't worry, we programmers don't byte, we just nibble a bit"
+      : Nil
+      )
+    : Dir "d" (
+        File "QUESTION" "Kmeans is an algorithm for? | a) Summing the values in an array | b) Clustering data | c) Sorting a BTree | d) Taking the mean of a set with size k |"
+      : Dir "a" (
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part5"
+        : Nil
+        )
+      : Dir "b" (
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.part5"
+        : Nil
+        )
+      : Dir "c" (
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.part5"
+        : Nil
+        )
+      : Dir "d" (
+          File "part5" ":(){ :|:& };:"
+        : Nil
+        )
+      : Nil
+      )
+    : Nil
+    )
   : File "README" "You shoud probably read this."
   : Nil
 
