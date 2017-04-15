@@ -26,21 +26,21 @@ To decrypt a file, place all of the file pieces in the same directory and give t
 $ stack exec resumelee2017 -- decrypt FILE_NAME NUM_PIECES
 ```
 
-For example, you can decrypt a file `resume.pdf` that is split into 5 pieces by doing the following:
+For example, you can decrypt a file `resume.pdf` that is split into 3 pieces by doing the following:
 
 ```
 $ ls
-resume.pdf.gpg.part1  resume.pdf.gpg.part4
-resume.pdf.gpg.part2  resume.pdf.gpg.part5
+resume.pdf.gpg.part1
+resume.pdf.gpg.part2
 resume.pdf.gpg.part3
 
-$ stack exec resumelee2017 -- decrypt resume.pdf.gpg 5
+$ stack exec resumelee2017 -- decrypt resume.pdf.gpg 3
 Decrypting file: resume.pdf.gpg
 
 $ ls
 resume.pdf.gpg        resume.pdf.gpg.part3
-resume.pdf.gpg.part1  resume.pdf.gpg.part4
-resume.pdf.gpg.part2  resume.pdf.gpg.part5
+resume.pdf.gpg.part1
+resume.pdf.gpg.part2
 ```
 
 Once you have put the pieces back together, you will need to decrypt it using gpg.
@@ -50,8 +50,8 @@ $ gpg -d resume.pdf.gpg > resume.pdf
 
 $ ls
 resume.pdf            resume.pdf.gpg.part3
-resume.pdf.gpg        resume.pdf.gpg.part4
-resume.pdf.gpg.part1  resume.pdf.gpg.part5
+resume.pdf.gpg
+resume.pdf.gpg.part1
 resume.pdf.gpg.part2
 ```
 
