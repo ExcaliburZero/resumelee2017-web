@@ -15,9 +15,11 @@ Once you have gathered all of the pieces, you will need to piece them back toget
 ## Terminal
 The locations of the file parts are hidden in files in the terminal. The terminal has support for several different commands, including `cd` ,`ls`, and `cat`. Enter `help` to see a full list of supported commands.
 
-The terminal directories contain questions that you must answer. Each answer corresponds to a subdirectory that you can enter to move onto the next question or get a part file location.
+The terminal directories contain questions that you must answer. Each answer corresponds to a subdirectory that you can enter to move onto the next question or get a part file location. You can find the questions in the `QUESTION` files that are placed in the difference directories.
 
 Look out for fake file parts if you get a question wrong. Some wrong answers are dead-ends, while others will give convincing fake file parts.
+
+Note that the `cd` command only supports moving by one directory at a time, and does not support absolute directories.
 
 ## Links
 * [Terminal](terminal.html)

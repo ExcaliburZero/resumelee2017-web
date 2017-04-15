@@ -487,7 +487,7 @@ defaultFiles = Dir "~/" $
     --------------------------------------------------------------------------
     --------------------------------------------------------------------------
   : Dir "part4" (
-      File "QUESTION" "In C, a right shift (>>>) shifts the bits of a number over to the right and fills with what bit? | a) 1 | b) An empty bit | c) The sign bit | d) 0 |"
+      File "QUESTION" "In C, a left shift (<<) shifts the bits of a number over to the left and fills with what bit? | a) 1 | b) A full bit | c) 0 | d) The sign bit |"
     : Dir "a" (
           File "part4" "Nope"
         : Nil
@@ -566,7 +566,6 @@ defaultFiles = Dir "~/" $
       )
     : Nil
     )
-  : File "README" "You shoud probably read this."
   : Nil
 
 -- | Parses the given String into a FilePath.
