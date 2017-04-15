@@ -477,7 +477,7 @@ defaultFiles = Dir "~/" $
         : Nil
         )
       : Dir "d" (
-          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.gpg.part3"
+          File "part3" "Nope"
         : Nil
         )
       : Nil
