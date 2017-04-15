@@ -349,11 +349,11 @@ defaultFiles = Dir "~/" $
       : Dir "c" (
           File "QUESTION" "GNU is short for what? | a) GNU's Not Unix | b) General Neophyte Unix | c) Generative Network Utilities | d) GNU's New Utilities |"
         : Dir "a" (
-            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.part1"
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.gpg.part1"
           : Nil
           )
         : Dir "b" (
-            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part1"
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.gpg.part1"
           : Nil
           )
         : Dir "c" (
@@ -361,7 +361,7 @@ defaultFiles = Dir "~/" $
           : Nil
           )
         : Dir "d" (
-            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/9/resume.pdf.part1"
+            File "part1" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/9/resume.pdf.gpg.part1"
           : Nil
           )
         : Nil
@@ -403,11 +403,11 @@ defaultFiles = Dir "~/" $
         : Nil
         )
       : Dir "b" (
-          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.part2"
+          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.gpg.part2"
         : Nil
         )
       : Dir "c" (
-          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.part2"
+          File "part2" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.gpg.part2"
         : Nil
         )
       : Dir "d" (
@@ -473,11 +473,11 @@ defaultFiles = Dir "~/" $
         : Nil
         )
       : Dir "c" (
-          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part3"
+          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.gpg.part3"
         : Nil
         )
       : Dir "d" (
-          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.part3"
+          File "part3" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.gpg.part3"
         : Nil
         )
       : Nil
@@ -517,13 +517,13 @@ defaultFiles = Dir "~/" $
           : Nil
           )
         : Dir "d" (
-            File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.part4"
+            File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/2/resume.pdf.gpg.part4"
           : Nil
           )
         : Nil
         )
     : Dir "d" (
-          File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.part4"
+          File "part4" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/4/resume.pdf.gpg.part4"
         : Nil
         )
     : Nil
@@ -547,15 +547,15 @@ defaultFiles = Dir "~/" $
     : Dir "d" (
         File "QUESTION" "Kmeans is an algorithm for? | a) Summing the values in an array | b) Clustering data | c) Sorting a BTree | d) Taking the mean of a set with size k |"
       : Dir "a" (
-          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.part5"
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/3/resume.pdf.gpg.part5"
         : Nil
         )
       : Dir "b" (
-          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.part5"
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/1/resume.pdf.gpg.part5"
         : Nil
         )
       : Dir "c" (
-          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.part5"
+          File "part5" "http://www.cs.oswego.edu/~cwells2/competitions/resumelee-2017/parts/5/resume.pdf.gpg.part5"
         : Nil
         )
       : Dir "d" (
